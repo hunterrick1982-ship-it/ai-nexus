@@ -39,9 +39,10 @@ async function getCategories() {
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: { search?: string; category?: string }
+  searchParams: Promise<{ search?: string; category?: string }>
 }) {
-  const articles = await getArticles(searchParams.search, searchParams.category)
+  const params = await searchParams
+  const articles = await getArticles(params.search, params.category)
   const categories = await getCategories()
 
   return (
@@ -57,7 +58,7 @@ export default async function HomePage({
       </section>
 
       {/* Categories */}
-      <CategoryFilter categories={categories} activeCategory={searchParams.category} />
+      <CategoryFilter categories={categories} activeCategory={params.category} />
 
       {/* Articles Grid */}
       {articles.length > 0 ? (
